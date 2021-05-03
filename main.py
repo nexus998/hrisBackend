@@ -11,7 +11,6 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)
-
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 api.add_resource(Group, '/group')
