@@ -41,8 +41,34 @@ class EntityModify(Resource):
         gr = cluster[group]
         entities = gr['entity']
         validate_group(group, request.headers['authorization'])
+
+        current_fields = entities.find_one({'_id': ObjectId(entity_id)})['fields']
+
         data = {'$set': request.get_json()}
         entities.update({'_id': ObjectId(entity_id)}, data)
+
+        j = request.get_json()
+
+        da = gr['entity_data']
+        # for x in range(len(j['fields'])):
+        new_name = j['fields'][0]['name']
+        # print(x, new_name, current_fields[x]['name'])
+        old_name = current_fields[0]['name']
+        d = da.find({'entity_id': entity_id})
+        counter = 0
+        for unit in d:
+
+            print(counter)
+            old_data = unit['data'][old_name]
+            print(unit['data'])
+            print(da.find_one({'_id': unit['_id']})['data'])
+            print(new_name, old_data, old_name, old_data)
+            da.update_one({'_id': unit['_id']}, {'$set': {'data.' + new_name: old_data}, '$unset': {'data.' + old_name: ""}})
+            counter += 1
+            # da.update_one({'_id': unit['_id']}, {'$set': {'data.' + new_name: old_data}})
+
+        # da.update({'entity_id': entity_id}, {'$set': {'data.' + current_fields[x]['name']: j['fields'][x]['name']}})
+
         return Response(dumps(entities.find_one({'_id': ObjectId(entity_id)})), mimetype='application/json')
 
     def delete(self, group, entity_id):

@@ -16,7 +16,6 @@ api.add_resource(Login, '/login')
 api.add_resource(Group, '/group')
 api.add_resource(Entity, '/group/<string:group>/entity')
 api.add_resource(EntityModify, '/group/<string:group>/entity/<string:entity_id>')
-api.add_resource(Field, '/group/<string:group>/entity/<string:entity_id>/field')
 api.add_resource(EntityData, '/group/<string:group>/entity/<string:entity_id>/data')
 api.add_resource(EntityDataFile, '/group/<string:group>/entity/<string:entity_id>/data/export')
 
